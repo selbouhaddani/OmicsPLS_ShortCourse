@@ -12,3 +12,15 @@ Please download the following files
 
 The exercises are given inline. They typically refer to the next code block. The answers and code output are given in the file ending with ANSWERS.html. 
 
+## Installing R packages
+
+```
+install.packages("tidyverse") # dataset & viz tools
+install.packages("magrittr")  # pipe operator
+install.packages("plotly")    # interactive plots
+
+install.packages("OmicsPLS")  # data integration toolkit
+
+install.packages("devtools")  # install experimental packages
+devtools::install_bitbucket("ibi_group/disgenet2r") ## Experimental R package
+```
