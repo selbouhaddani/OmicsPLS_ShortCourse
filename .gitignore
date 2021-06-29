@@ -35,5 +35,5 @@ vignettes/*.pdf
 # Shiny token, see https://shiny.rstudio.com/articles/shinyapps.html
 rsconnect/
 
-# source files
+# Source files
 *.Rmd
