@@ -1,7 +1,7 @@
-# OmicsPLS ShortCourse
-2021 Edition
+# OmicsPLS Short Course
+*2021 Edition | [Said el Bouhaddani](https://www.linkedin.com/in/selbouhaddani/) and [Zhujie Gu](https://www.linkedin.com/in/zhujiegu/)*
 
-## Downloading material
+## Download material
 
 Please download the following files
 
