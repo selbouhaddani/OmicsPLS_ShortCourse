@@ -25,3 +25,9 @@ install.packages("OmicsPLS")  # data integration toolkit
 install.packages("devtools")  # install experimental packages
 devtools::install_bitbucket("ibi_group/disgenet2r") ## Experimental R package
 ```
+
+## Evaluation form
+
+Please fill in the short evaluation form. Your feedback is much appreciated. 
+
+[Click here for the form.](https://forms.gle/2eM11y5WhA57VDCH8)
