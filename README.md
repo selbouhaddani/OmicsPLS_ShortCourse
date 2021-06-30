@@ -31,3 +31,14 @@ devtools::install_bitbucket("ibi_group/disgenet2r") ## Experimental R package
 Please fill in the short evaluation form. Your feedback is much appreciated. 
 
 [Click here for the form.](https://forms.gle/2eM11y5WhA57VDCH8)
+
+
+## Reading material
+
+> Bouhaddani, S.e., Houwing-Duistermaat, J., Salo, P. et al. Evaluation of O2PLS in Omics data integration. BMC Bioinformatics 17, S11 (2016). https://doi.org/10.1186/s12859-015-0854-z
+
+> Bouhaddani, S., Uh, HW., Jongbloed, G. et al. Integrating omics datasets with the OmicsPLS package. BMC Bioinformatics 19, 371 (2018). https://doi.org/10.1186/s12859-018-2371-3
+
+> Gu, Z., el Bouhaddani, S., Pei, J. et al. Statistical integration of two omics datasets using GO2PLS. BMC Bioinformatics 22, 131 (2021). https://doi.org/10.1186/s12859-021-03958-3
+
+
