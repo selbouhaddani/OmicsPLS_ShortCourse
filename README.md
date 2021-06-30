@@ -3,7 +3,7 @@
 
 ## Download material
 
-Please click on the following links and download the files using the download button in the right. Alternatively, download the whole repo by clicking on download, and then download ZIP. 
+Please click on the following links and download the files using the download button on the right. Alternatively, download the whole repo by clicking on "code", and then "download ZIP". 
 
 - https://github.com/selbouhaddani/OmicsPLS_ShortCourse/blob/main/OmicsPLS_shortCourse.html
 - https://github.com/selbouhaddani/OmicsPLS_ShortCourse/blob/main/OmicsPLS_shortCourse_ANSWERS.html
