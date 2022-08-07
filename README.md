@@ -1,9 +1,9 @@
 # OmicsPLS Short Course
-*2021 Edition* | [Said el Bouhaddani](https://www.linkedin.com/in/selbouhaddani/) and [Zhujie Gu](https://www.linkedin.com/in/zhujiegu/)
+*2022 Edition* | [Said el Bouhaddani](https://www.linkedin.com/in/selbouhaddani/) and [Jeanine Houwing-Duistermaat](https://www.linkedin.com/in/jeanine-houwing-duistermaat/)
 
-## Download material
+## Instructions to download material
 
-Please click on the following links and download the files using the download button on the right. Alternatively, download the whole repo by clicking on "code", and then "download ZIP". 
+Please click on the following links and download the files using the **download button** on the right. Check that the extensions are correct, i.e. '.html' and '.RData'. Alternatively, download the whole repo by clicking on "code", and then "download ZIP". 
 
 - https://github.com/selbouhaddani/OmicsPLS_ShortCourse/blob/main/OmicsPLS_shortCourse.html
 - https://github.com/selbouhaddani/OmicsPLS_ShortCourse/blob/main/OmicsPLS_shortCourse_ANSWERS.html
@@ -30,7 +30,7 @@ devtools::install_bitbucket("ibi_group/disgenet2r") ## Experimental R package
 
 Please fill in the short evaluation form. Your feedback is much appreciated. 
 
-[Click here for the form.](https://forms.gle/2eM11y5WhA57VDCH8)
+[Click here for the form.](https://forms.gle/w6Tj3MSeRYZ7HaaW6)
 
 
 ## Reading material
