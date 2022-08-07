@@ -38,3 +38,6 @@ rsconnect/
 # Source files
 *.Rmd
 .DS_Store
+*.RProj
+.Rproj.user/
+OmicsPLS_ShortCourse.Rproj
