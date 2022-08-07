@@ -38,3 +38,4 @@ rsconnect/
 # Source files
 *.Rmd
 .DS_Store
+*.Rproj
