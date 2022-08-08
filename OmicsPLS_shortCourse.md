@@ -61,6 +61,13 @@ output:
 
 These are exercises for the OmicsPLS short course. There are several questions throughout the text, and the corresponding R code to answer the question is given after the question. The answer key contains all output of each code block as well as brief answers to the questions. Note that some questions don't have a unique answer, but the idea should be clear. 
 
+## Integrative analysis
+
+In this part, we consider a data integration approach to link the information in methylation and glycomics data. This 'joint information' is then related to Down syndrome. In the exercises, we work with a subset of methylation only on chromosome 21. 
+
+A flexible data integration approach for two heterogeneous datasets is O2PLS and is available in the OmicsPLS package. We will use OmicsPLS to select the most important genes corresponding with the methylation sites, this mapping can be found in the `CpG_groups` object where each CpG (methylation) site has one or more associated genes. The number of methylation sites is found by running `length(CpG_groups)`, and the number of genes is found with `length(unique(CpG_groups))`.
+
+
 ## Load packages and datasets
 
 We need several packages for data handling, fitting and visualizing the results. Run this code to see which are not yet installed. All packages can be installed with `install.packages`, except disgenet2r, which has a separate install command shown below. 
@@ -88,7 +95,7 @@ library(OmicsPLS)  # data integration toolkit
 # devtools::install_bitbucket("ibi_group/disgenet2r")
 ```
 
-The datasets are found in the `DownSyndrome.RData` file. A simple `load` statement should load them in your workspace. The `str` function can be used to get a first impression of the data objects. 
+The datasets are found in the `DownSyndrome.RData` file. We work with a subset of the methylation data measured only on chromosome 21.  A simple `load` statement should load them in your workspace. The `str` function can be used to get a first impression of the data objects. 
 
 
 ```{.r .Routp}
@@ -107,7 +114,7 @@ str(CpG_groups)
 Before any analysis can be performed, you should consider calculating some descriptives about the data. 
 
 :::: {.bluebox .question data-latex=""}
-**_Exercises._** Plot boxplots of (a subset of) the data columns. Also describe the clinical variables in terms of number of cases and controls, age and sex distributions. Are there any remarkable observations? 
+**_Exercises._** Plot boxplots of (a subset of) the data columns. Also describe the demographics: case-controls, age and sex distributions. Are there any remarkable observations? 
 ::::
 
 \ 
@@ -117,7 +124,7 @@ Before any analysis can be performed, you should consider calculating some descr
 **_Answers (Click here)_** 
 </a>
 <div id="foo0" style="display:none">
-The variables appear to be symmetric, without large outliers. There are some large variance CpG variables. There are 29 DS patients, 29 mothers, and 27 siblings. You can further inspect age and sex distributions using `hist` and `table`. 
+The variables appear to be symmetric, without large outliers. There are some large variance CpG variables. There are 29 DS patients, 29 mothers, and 27 siblings. You can further inspect age and sex distributions using `hist` and `table`, e.g. `table(ClinicalVars$sex, ClinicalVars$group)`. 
 </div>
 ::::
 
@@ -135,10 +142,6 @@ table(ClinicalVars$group)
 
 
 # Cross-validation to choose number of OmicsPLS components
-
-In this part, we consider a data integration approach to link the information in methylation and glycomics data. This 'joint information' is then related to Down syndrome. 
-
-A flexible data integration approach for two heterogeneous datasets is O2PLS and is available in the OmicsPLS package. We will use OmicsPLS to select the most important genes corresponding with the methylation sites, this mapping can be found in the `CpG_groups` object where each CpG (methylation) site has one or more associated genes. The number of methylation sites is found by running `length(CpG_groups)`, and the number of genes is found with `length(unique(CpG_groups))`.
 
 
 ## Choosing the number of components 
@@ -562,6 +565,4 @@ DGN_DownS <- DGN_DE@qresult %>%
     pull(shared_symbol) %>% str_split(";") %>% unlist
 # cat(DGN_DownS, sep="\n")
 ```
-
-
 

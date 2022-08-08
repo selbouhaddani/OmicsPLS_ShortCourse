@@ -1169,6 +1169,21 @@ the question is given after the question. The answer key contains all
 output of each code block as well as brief answers to the questions.
 Note that some questions don’t have a unique answer, but the idea should
 be clear.</p>
+<div id="integrative-analysis" class="section level2">
+<h2>Integrative analysis</h2>
+<p>In this part, we consider a data integration approach to link the
+information in methylation and glycomics data. This ‘joint information’
+is then related to Down syndrome. In the exercises, we work with a
+subset of methylation only on chromosome 21.</p>
+<p>A flexible data integration approach for two heterogeneous datasets
+is O2PLS and is available in the OmicsPLS package. We will use OmicsPLS
+to select the most important genes corresponding with the methylation
+sites, this mapping can be found in the <code>CpG_groups</code> object
+where each CpG (methylation) site has one or more associated genes. The
+number of methylation sites is found by running
+<code>length(CpG_groups)</code>, and the number of genes is found with
+<code>length(unique(CpG_groups))</code>.</p>
+</div>
 <div id="load-packages-and-datasets" class="section level2">
 <h2>Load packages and datasets</h2>
 <p>We need several packages for data handling, fitting and visualizing
@@ -1189,10 +1204,11 @@ disgenet2r, which has a separate install command shown below.</p>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="do">## Also needed but not loaded</span></span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(&quot;httr&quot;)</span></span>
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># devtools::install_bitbucket(&quot;ibi_group/disgenet2r&quot;)</span></span></code></pre></div>
-<p>The datasets are found in the <code>DownSyndrome.RData</code> file. A
-simple <code>load</code> statement should load them in your workspace.
-The <code>str</code> function can be used to get a first impression of
-the data objects.</p>
+<p>The datasets are found in the <code>DownSyndrome.RData</code> file.
+We work with a subset of the methylation data measured only on
+chromosome 21. A simple <code>load</code> statement should load them in
+your workspace. The <code>str</code> function can be used to get a first
+impression of the data objects.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r Routp"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;DownSyndrome.RData&quot;</span>)  </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="do">## str gives an overview of all kinds of objects</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Methylation data:</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
@@ -1226,9 +1242,8 @@ the data objects.</p>
 some descriptives about the data.</p>
 <div class="bluebox question">
 <p><strong><em>Exercises.</em></strong> Plot boxplots of (a subset of)
-the data columns. Also describe the clinical variables in terms of
-number of cases and controls, age and sex distributions. Are there any
-remarkable observations?</p>
+the data columns. Also describe the demographics: case-controls, age and
+sex distributions. Are there any remarkable observations?</p>
 </div>
 <p> </p>
 <div class="blueboxx">
@@ -1238,7 +1253,8 @@ remarkable observations?</p>
 <p>The variables appear to be symmetric, without large outliers. There
 are some large variance CpG variables. There are 29 DS patients, 29
 mothers, and 27 siblings. You can further inspect age and sex
-distributions using <code>hist</code> and <code>table</code>.</p>
+distributions using <code>hist</code> and <code>table</code>,
+e.g. <code>table(ClinicalVars$sex, ClinicalVars$group)</code>.</p>
 </div>
 </div>
 <p> </p>
@@ -1269,17 +1285,6 @@ distributions using <code>hist</code> and <code>table</code>.</p>
 </div>
 <div id="cross-validation-to-choose-number-of-omicspls-components" class="section level1">
 <h1>Cross-validation to choose number of OmicsPLS components</h1>
-<p>In this part, we consider a data integration approach to link the
-information in methylation and glycomics data. This ‘joint information’
-is then related to Down syndrome.</p>
-<p>A flexible data integration approach for two heterogeneous datasets
-is O2PLS and is available in the OmicsPLS package. We will use OmicsPLS
-to select the most important genes corresponding with the methylation
-sites, this mapping can be found in the <code>CpG_groups</code> object
-where each CpG (methylation) site has one or more associated genes. The
-number of methylation sites is found by running
-<code>length(CpG_groups)</code>, and the number of genes is found with
-<code>length(unique(CpG_groups))</code>.</p>
 <div id="choosing-the-number-of-components" class="section level2">
 <h2>Choosing the number of components</h2>
 <p>To apply OmicsPLS, we first need to decide on the number of

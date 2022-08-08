@@ -36,7 +36,6 @@ vignettes/*.pdf
 rsconnect/
 
 # Source files
-*.Rmd
 .DS_Store
 *.RProj
 .Rproj.user/

@@ -2,7 +2,7 @@
 title: "Integrating multi-omics underlying Down syndrome with OmicsPLS"
 subtitle: "Answer key"
 author: "Said el Bouhaddani and Jeanine Houwing-Duistermaat"
-date: '2022-08-08'
+date: '`r Sys.Date()`'
 output:
   rmdformats::material:
     highlight: tango
@@ -14,7 +14,7 @@ output:
 ---
 
 
-<style type="text/css">
+```{css, echo=FALSE}
 .Routp {
   background-color: "#D1F2EB";
   border: 2px solid grey;
@@ -41,10 +41,16 @@ output:
   background-position: left center;
 }
 
-</style>
+```
 
 
-
+```{r global_options, include=FALSE, eval=TRUE}
+library(knitr)
+library(rmdformats)
+opts_chunk$set(fig.path='Figs/', eval=TRUE, results = "hold", fig.align = 'center', 
+               class.source="Routp", echo=TRUE, warning=TRUE, message=TRUE, 
+               dev='png', dpi=200, cache = FALSE, collapse=TRUE)
+```
 
 
 <script type="text/javascript">
@@ -73,16 +79,14 @@ A flexible data integration approach for two heterogeneous datasets is O2PLS and
 
 We need several packages for data handling, fitting and visualizing the results. Run this code to see which are not yet installed. All packages can be installed with `install.packages`, except disgenet2r, which has a separate install command shown below. 
 
-
-```{.r .Routp}
+```{r, eval=F}
 req_pack <- c("MASS", "parallel", "tidyverse", "magrittr", 
               "plotly", "OmicsPLS", "httr", "disgenet2r")
 req_pack[which(!(req_pack %in% installed.packages()[,1]))]
 ```
 
 
-
-```{.r .Routp}
+```{r Load packages, message=FALSE}
 library(MASS)      # statistical tools, such as lda
 library(parallel)  # parallel computing
 library(tidyverse) # dataset & viz tools
@@ -98,8 +102,7 @@ library(OmicsPLS)  # data integration toolkit
 
 The datasets are found in the `DownSyndrome.RData` file. We work with a subset of the methylation data measured only on chromosome 21.  A simple `load` statement should load them in your workspace. The `str` function can be used to get a first impression of the data objects. 
 
-
-```{.r .Routp}
+```{r Load and inspect datasets}
 load("DownSyndrome.RData")  
 ## str gives an overview of all kinds of objects
 cat("Methylation data:\n")
@@ -108,24 +111,6 @@ cat("\nGlycomics data:\n")
 str(glycomics)
 cat("\nCpG mapping to gene:\n")
 str(CpG_groups)
-## Methylation data:
-##  num [1:85, 1:3322] 0.0172 0.00452 0.0155 -0.01554 -0.03823 ...
-##  - attr(*, "dimnames")=List of 2
-##   ..$ : chr [1:85] "GSM1272122" "GSM1272123" "GSM1272124" "GSM1272125" ...
-##   ..$ : chr [1:3322] "cg00002080" "cg00004533" "cg00026030" "cg00037450" ...
-##  - attr(*, "scaled:center")= Named num [1:3322] 6.53e-19 3.30e-19 7.65e-21 -1.37e-19 3.19e-20 ...
-##   ..- attr(*, "names")= chr [1:3322] "cg00002080" "cg00004533" "cg00026030" "cg00037450" ...
-## 
-## Glycomics data:
-##  num [1:85, 1:10] 0.159 0.244 0.246 0.366 0.143 ...
-##  - attr(*, "dimnames")=List of 2
-##   ..$ : chr [1:85] "GSM1272122" "GSM1272123" "GSM1272124" "GSM1272125" ...
-##   ..$ : chr [1:10] "P1" "P2" "P3" "P4" ...
-##  - attr(*, "scaled:center")= Named num [1:10] 1.976 0.407 1.955 1.375 3.711 ...
-##   ..- attr(*, "names")= chr [1:10] "P1" "P2" "P3" "P4" ...
-## 
-## CpG mapping to gene:
-##  chr [1:3322] "RWDD2B" "AGPAT3;AGPAT3" "SYNJ1;SYNJ1;SYNJ1;SYNJ1" "PWP2" ...
 ```
 
 ## Descriptive analysis
@@ -151,39 +136,11 @@ The variables appear to be symmetric, without large outliers. There are some lar
 
 
 
-
-```{.r .Routp}
+```{r Descriptive plots}
 boxplot(glycomics)
-```
-
-<img src="Figs/Descriptive plots-1.png" style="display: block; margin: auto;" />
-
-```{.r .Routp}
 boxplot(methylation[,1:100])
-```
-
-<img src="Figs/Descriptive plots-2.png" style="display: block; margin: auto;" />
-
-```{.r .Routp}
 print(ClinicalVars)
 table(ClinicalVars$group)
-## # A tibble: 85 × 6
-##    ID         group group_ds   age sex   family
-##    <chr>      <fct> <fct>    <int> <fct>  <int>
-##  1 GSM1272122 DS    yes         18 M          1
-##  2 GSM1272123 DS    yes         12 F          3
-##  3 GSM1272124 DS    yes         13 F          7
-##  4 GSM1272125 DS    yes         24 M          9
-##  5 GSM1272126 DS    yes         33 M         10
-##  6 GSM1272127 DS    yes         31 F         11
-##  7 GSM1272128 DS    yes         19 F         13
-##  8 GSM1272129 DS    yes         29 M         20
-##  9 GSM1272130 DS    yes         22 F         23
-## 10 GSM1272131 DS    yes         36 M         28
-## # … with 75 more rows
-## 
-## DS SB MA 
-## 29 27 29
 ```
 
 
@@ -213,14 +170,10 @@ The optimal number of components changes a bit between runs, but 2, 4 and 6 (or 
 
 \ 
 
-
-```{.r .Routp}
+```{r Decide on number of components, cache = TRUE}
 set.seed(83654)
 crossval_o2m_adjR2(X = methylation, Y = glycomics, 
                    a = 1:5, ax = 0:10, ay = 0:9, nr_folds = 10, nr_cores = 1)
-## Some combinations of # components exceed data dimensions, these combinations are not considered
-## Minimum is at n = 1
-## Elapsed time: 71.69 sec
 ## -> 2 4 6
 
 # par(mfrow=c(1,3))
@@ -231,12 +184,7 @@ crossval_o2m_adjR2(X = methylation, Y = glycomics,
 # ## -> 3 5 1
 
 r <- 4; rx <- 2; ry <- 6
-##         MSE n nx ny
-## 1 0.3298761 1  5  7
-## 2 0.3306665 2  4  6
-## 3 0.3382926 3  4  5
-## 4 0.3304293 4  2  6
-## 5 0.3328180 5  1  5
+
 ```
 
 <!---
@@ -265,35 +213,16 @@ There are 483 groups. Based on the CV, we should keep 200 groups in the first co
 \ 
 
 
-
-```{.r .Routp}
+```{r Decide number of groups, based on covariance, cache = TRUE}
 set.seed(7545)
 crossval_sparsity(methylation, glycomics, r,rx,ry, 10, 
                   groupx = CpG_groups, keepx_seq = 1:10*40, keepy_seq = 10)
-## Group information provided, CV for number of groups to keep
-## $Best
-## x_1sd1 x_1sd2 x_1sd3 x_1sd4 y_1sd1 y_1sd2 y_1sd3 y_1sd4     x1     x2     x3 
-##     40     40     40     40     10     10     10     10    400     40    400 
-##     x4     y1     y2     y3     y4 
-##     80     10     10     10     10 
-## 
-## $Covs
-##             40          80         120         160         200         240
-## 10 0.001890742 0.001935982 0.001884394 0.001825501 0.001760104 0.001698085
-##            280         320         360         400
-## 10 0.001635634 0.001546551 0.001482363 0.001424144
-## 
-## $SEcov
-##              40           80         120          160          200          240
-## 10 0.0004748762 0.0005008425 0.000495813 0.0004872649 0.0004644634 0.0004502913
-##             280          320          360          400
-## 10 0.0004389727 0.0004247667 0.0004117842 0.0003966472
+
 ```
 
 To explicitly run a cross-validation that optimizes for predicting Down syndrome, we need to write a piece of code ourselves. We divide the subjects in each outcome class in ten folds, such that each fold consists of around three DS cases, three siblings and three mothers. We further define a grid of ten values for the number of groups to keep, from 1 to 483. 
 
-
-```{.r .Routp}
+```{r Decide number of groups, based on predicting outcome, cache = TRUE}
 cv_folds <- 10 # number of folds
 cv_cores <- 1 # number of cores
 cv_intervals <- 10 # a grid with keepx values (groups to keep)
@@ -329,7 +258,7 @@ function(jj){
   outp
 })
 names(cvoutp) <- as.character(cv_grid)
-## 1/483; 55/483; 108/483; 162/483; 215/483; 269/483; 322/483; 376/483; 429/483; 483/483;
+
 ```
 
 An interactive plot is shown with three error types. The error when predicting $Y$ with $X$, $X$ with $Y$, and the outcome with $T$. 
@@ -352,26 +281,18 @@ Based on the MSE of predicting the outcome, we keep around 100 groups.
 \ 
 
 
-
-```{.r .Routp}
+```{r Plot CV results for number of groups}
 sapply(cvoutp, function(e) rowMeans(e)) %>% t %>% 
   as.data.frame %>% mutate(across(-nr, scale)) %>% 
   gather(key = "Type", value = "Error", -nr) %>% 
   ggplot(aes(x=nr, y=Error, col=Type)) + geom_line() #-> p1
-## Warning: attributes are not identical across measure variables;
-## they will be dropped
-```
-
-<img src="Figs/Plot CV results for number of groups-1.png" style="display: block; margin: auto;" />
-
-```{.r .Routp}
 #ggplotly(p1)
+
 ```
 
 We redo the cross-validation for a finer grid around potential choices for the sparsity level. This should allow us to choose the definitive number of genes to retain. 
 
-
-```{.r .Routp}
+```{r Redo CV number of groups around certain values, cache = TRUE}
 cv_gridbest <- round(c(25, 50, 75, 100, 150, 175, 200))
 cvoutp_best <- mclapply(mc.cores = cv_cores, cv_gridbest, 
 function(jj){
@@ -397,7 +318,7 @@ function(jj){
   outp
 }); 
 names(cvoutp_best) <- as.character(cv_gridbest)
-## 25 ;  50 ;  75 ;  100 ;  150 ;  175 ;  200 ;
+
 ```
 
 We plot the error for each choice, using boxplots. In this way, the variation across cross-validation runs is shown. 
@@ -420,8 +341,7 @@ Somewhere between 100 and 200 is the optimal number. Taken into account that the
 \ 
 
 
-
-```{.r .Routp}
+```{r Plot again CV results}
 # sapply(cvoutp_best, function(e) rowMeans(e)) %>% t %>% 
 #   as.data.frame %>% mutate(across(-nr, scale)) %>% 
 #   gather(key = "Type", value = "Error", -nr) %>% 
@@ -433,9 +353,8 @@ lapply(cvoutp_best, function(e) t(e) %>%
   Reduce(f=bind_rows) %>%
   ggplot(aes(x=as.factor(nr), y=Error)) + geom_boxplot() +
   facet_grid(Type~.,scales = "free")
-```
 
-<img src="Figs/Plot again CV results-1.png" style="display: block; margin: auto;" />
+```
 
 --->
 
@@ -445,48 +364,10 @@ lapply(cvoutp_best, function(e) t(e) %>%
 
 We fit O2PLS to the methylation and glycomics data, and calculate the variance explained by the joint and specific parts. 
 
-
-```{.r .Routp}
+```{r Fit OmicsPLS and summary}
 fit <- o2m(methylation, glycomics, r, rx, ry)
 summary(fit)
-## 
-## *** Summary of the O2PLS fit *** 
-## 
-## -  Call: o2m(X = methylation, Y = glycomics, n = r, nx = rx, ny = ry) 
-## 
-## -  Modeled variation
-## -- Total variation:
-## in X: 377.2632 
-## in Y: 73.11544 
-## 
-## -- Joint, Orthogonal and Noise as proportions:
-## 
-##            data X data Y
-## Joint       0.108  0.084
-## Orthogonal  0.135  0.916
-## Noise       0.757  0.000
-## 
-## -- Predictable variation in Y-joint part by X-joint part:
-## Variation in T*B_T relative to U: 0.514 
-## -- Predictable variation in X-joint part by Y-joint part:
-## Variation in U*B_U relative to T: 0.5 
-## 
-## -- Variances per component:
-## 
-##         Comp 1 Comp 2 Comp 3 Comp 4
-## X joint 14.955  7.679 10.218  7.890
-## Y joint  3.983  1.286  0.761  0.117
-## 
-##        Comp 1 Comp 2
-## X Orth 30.302 20.611
-## 
-##        Comp 1 Comp 2 Comp 3 Comp 4 Comp 5 Comp 6
-## Y Orth 18.318 13.758 19.502  5.324  2.926  5.448
-## 
-## 
-## -  Coefficient in 'U = T B_T + H_U' model:
-## -- Diagonal elements of B_T =
-##  0.38 0.302 0.209 0.078
+
 ```
 
 ## Visualize the results: loadings
@@ -513,18 +394,10 @@ For the glycan data: in component 1, P1 and P7 have a high loading value. In com
 \ 
 
 
-
-```{.r .Routp}
+```{r Plot the loadings}
 plot(fit,loading_name = "Yj",i=1,j=2,label = "col") + theme_bw()
-```
-
-<img src="Figs/Plot the loadings-1.png" style="display: block; margin: auto;" />
-
-```{.r .Routp}
 plot(fit,loading_name = "Xj",i=1,j=2,label = "col") + theme_bw()
 ```
-
-<img src="Figs/Plot the loadings-2.png" style="display: block; margin: auto;" />
 
 
 ## Visualize the results: scores
@@ -549,15 +422,9 @@ There is no perfect separation, but in the second component there seems to be a 
 \ 
 
 
-
-```{.r .Routp}
+```{r Plot the scores}
 plot(data.frame(Tt=fit$Tt,U=fit$U), col = ClinicalVars$group, pch=20,
      main="Joint X and Y components against each other")
-```
-
-<img src="Figs/Plot the scores-1.png" style="display: block; margin: auto;" />
-
-```{.r .Routp}
 data.frame(Group = ClinicalVars$group, JPC = scores(fit, "Xjoint")) %>% 
   pivot_longer(-Group,
                names_to = "Comp", 
@@ -566,8 +433,6 @@ data.frame(Group = ClinicalVars$group, JPC = scores(fit, "Xjoint")) %>%
   geom_boxplot() + xlab("Component") + ylab("X scores") +
   theme_bw()
 ```
-
-<img src="Figs/Plot the scores-2.png" style="display: block; margin: auto;" />
 
 We perform a logistic regression with the Down syndrome status as outcome, and the joint methylation scores as covariates. We exclude the mothers for now. 
 
@@ -589,59 +454,12 @@ DS is the reference (the first level when running `levels(glm_datmat$outc)`). Th
 \ 
 
 
-
-```{.r .Routp}
+```{r Logistic regression with JPC}
 glm_datmat <- data.frame(JPC=scores(fit, "Xjoint"), 
            outc = ClinicalVars$group) 
 glm(outc ~ ., data = glm_datmat%>% filter(outc != "MA"), family = "binomial") %>% summary()
 
 summary(lm(JPC.1 ~ outc, data = glm_datmat))
-## 
-## Call:
-## glm(formula = outc ~ ., family = "binomial", data = glm_datmat %>% 
-##     filter(outc != "MA"))
-## 
-## Deviance Residuals: 
-##     Min       1Q   Median       3Q      Max  
-## -1.8549  -0.8082  -0.2482   0.8247   1.9569  
-## 
-## Coefficients:
-##             Estimate Std. Error z value Pr(>|z|)   
-## (Intercept)  -0.2565     0.3406  -0.753  0.45130   
-## JPC.1         3.3245     1.1260   2.952  0.00315 **
-## JPC.2        -1.2129     1.1936  -1.016  0.30954   
-## JPC.3        -0.8280     1.1664  -0.710  0.47776   
-## JPC.4         1.6215     1.1565   1.402  0.16090   
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## (Dispersion parameter for binomial family taken to be 1)
-## 
-##     Null deviance: 77.561  on 55  degrees of freedom
-## Residual deviance: 54.914  on 51  degrees of freedom
-## AIC: 64.914
-## 
-## Number of Fisher Scoring iterations: 5
-## 
-## 
-## Call:
-## lm(formula = JPC.1 ~ outc, data = glm_datmat)
-## 
-## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -0.79148 -0.26034 -0.03155  0.22301  1.11569 
-## 
-## Coefficients:
-##             Estimate Std. Error t value Pr(>|t|)    
-## (Intercept) -0.17510    0.07133  -2.455   0.0162 *  
-## outcSB       0.43569    0.10273   4.241 5.81e-05 ***
-## outcMA       0.10759    0.10088   1.067   0.2893    
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 0.3841 on 82 degrees of freedom
-## Multiple R-squared:  0.1909,	Adjusted R-squared:  0.1712 
-## F-statistic: 9.673 on 2 and 82 DF,  p-value: 0.0001691
 ```
 
 
@@ -652,12 +470,12 @@ We saw that joint methylation component one seemed to be significantly associate
 Although determining a threshold to select the number of 'top' CpG sites is not straightforward, we are going to select 200 based on earlier analysis of these data. We also need to map from cg ID to gene ID. 
 
 
-
-```{.r .Routp}
+```{r Interpretation based on selected genes}
 top_cg <- order(loadings(fit, subset=1)^2,decreasing = TRUE)
 gene_list <- CpG_groups[top_cg[1:200]]
 gene_list %<>% paste0(collapse = ";") %>% 
   str_split(";") %>% unlist %>% unique 
+
 ```
 
 
@@ -683,8 +501,7 @@ From the [https://string-db.org/](https://string-db.org/) website, choose homo s
 \ 
 
 
-
-```{.r .Routp}
+```{r Paste the result in e.g. string}
 # gene_list %>% cat(sep="\n")
 ```
 
@@ -711,8 +528,7 @@ The top hit is Down syndrome. The top genes apparently contain more genes that a
 \ 
 
 
-
-```{.r .Routp}
+```{r Run DisGeNet analysis, message=FALSE}
 ### Bonus, run this code to perform DisGeNet enrichment
 # disgenet_api_key <- "271e054761763b144a97872b059fd573186bdd9f"
 options(timeout=4e9)
@@ -720,20 +536,6 @@ httr::timeout(4e9) # if needed to give curl more time
 DGN_DE <- disgenet2r::disease_enrichment(gene_list, database = "ALL")
 DGN_DE@qresult[1:10,
           c("Description", "FDR", "Ratio",  "BgRatio")]
-## <request>
-## Options:
-## * timeout_ms: 4e+12
-##                        Description          FDR Ratio   BgRatio
-## 236                  Down Syndrome 4.983930e-35 38/65 766/21666
-## 2736  Complete Trisomy 21 Syndrome 2.709284e-34 36/65 669/21666
-## 2320 DOWN SYNDROME CRITICAL REGION 9.293346e-19 13/65  57/21666
-## 1853        Chromosome 21 monosomy 1.849628e-07  5/65  13/21666
-## 2468      Alzheimer disease type 1 1.452115e-05  3/65   3/21666
-## 169            Cognition Disorders 8.819130e-05 12/65 607/21666
-## 375           Hirschsprung Disease 8.819130e-05 10/65 384/21666
-## 548             Mental Retardation 1.006005e-04 11/65 505/21666
-## 207             Presenile dementia 2.703029e-03 11/65 718/21666
-## 303             Fragile X Syndrome 4.152165e-03  6/65 194/21666
 ```
 
 ```
@@ -754,12 +556,12 @@ DGN_DE@qresult[1:10,
 BONUS: You can also combine the String-DB and DisGeNet analyses by making an interaction netwerk of the genes in a particular disease term. Below is the code to print the genes that are in the Down Syndrome disease term. This list can be copy-pasted into String-DB and analyzed.
 
 
-
-```{.r .Routp}
+```{r}
 DGN_DownS <- DGN_DE@qresult %>%
     filter(Description == "Down Syndrome") %>%
     pull(shared_symbol) %>% str_split(";") %>% unlist
 # cat(DGN_DownS, sep="\n")
+
 ```
 
 
