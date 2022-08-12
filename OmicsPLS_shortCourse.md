@@ -2,7 +2,7 @@
 title: "Integrating multi-omics underlying Down syndrome with OmicsPLS"
 subtitle: "Exercises"
 author: "Said el Bouhaddani and Jeanine Houwing-Duistermaat"
-date: '2022-08-08'
+date: '2022-08-21'
 output:
   rmdformats::material:
     highlight: tango
@@ -184,176 +184,6 @@ crossval_o2m_adjR2(X = methylation, Y = glycomics,
 r <- 4; rx <- 2; ry <- 6
 ```
 
-<!---
-### Choosing the number of methylation groups
-
-After choosing the number of components, we need to specify how many methylation groups to select (a methylation group is a set of CpG sites that were grouped because the have the same target gene). Also here, a cross-validation is possible. There are many criteria to optimize in a cross-validation. We will go through some of them. 
-
-The first one is the covariance between the joint components in the methylation and glycomics data, $\mathrm{Cov}(T,U)$ in the left out fold. This is implemented in the function `crossval_sparsity`. The advantage is that this criterion is independent of the case-control status and can be used in all kinds of study designs. On the other hand, the resulting number of groups to keep can be too small or large with respect to the number of groups that are relevant to the case-control status. 
-
-:::: {.bluebox .question data-latex=""}
-How many unique groups do we have? Use `length` and `unique` on `CpG_groups` for this.
-Using the function `crossval_sparsity`, how many groups of CpG sites should we keep?
-::::
-
-\ 
-
-:::: {.blueboxx data-latex=""}
-<a href="javascript:void()" onclick="toggle_visibility('foo2');">
-**_Answers (Click here)_** 
-</a>
-<div id="foo2" style="display:none">
-There are 483 groups. Based on the CV, we should keep 200 groups in the first component, and 40 groups in the second. 
-</div>
-::::
-
-\ 
-
-
-
-```{.r .Routp}
-set.seed(7545)
-crossval_sparsity(methylation, glycomics, r,rx,ry, 10, 
-                  groupx = CpG_groups, keepx_seq = 1:10*40, keepy_seq = 10)
-```
-
-To explicitly run a cross-validation that optimizes for predicting Down syndrome, we need to write a piece of code ourselves. We divide the subjects in each outcome class in ten folds, such that each fold consists of around three DS cases, three siblings and three mothers. We further define a grid of ten values for the number of groups to keep, from 1 to 483. 
-
-
-```{.r .Routp}
-cv_folds <- 10 # number of folds
-cv_cores <- 1 # number of cores
-cv_intervals <- 10 # a grid with keepx values (groups to keep)
-cv_set <- c(DS=cut(1:29, cv_folds) %>% as.numeric, # define folds in each outcome class
-              SB=cut(1:27, cv_folds) %>% as.numeric, 
-              MA=cut(1:29, cv_folds) %>% as.numeric)
-X <- methylation
-Y <- glycomics
-group <- ClinicalVars$group_ds
-cv_grid <- round(seq(1,length(unique(CpG_groups)),length.out=cv_intervals))
-
-cvoutp <- mclapply(mc.cores=cv_cores,cv_grid, # compute errors across the grid, over the folds
-function(jj){
-  jj <- as.numeric(jj)
-  cat(jj, "/", length(unique(CpG_groups)), "; ",sep="")
-  outp <- sapply(1:cv_folds, function(ii){
-    iii <- which(ii == cv_set)
-    Xtst <- X[iii,]
-    Ytst <- Y[iii,]
-    Xtrn <- X[-iii,]
-    Ytrn <- Y[-iii,]
-    fit <- try(suppressMessages(o2m(Xtrn,Ytrn,r,rx,ry,sparse=T,keepx=jj,groupx = CpG_groups)), silent = TRUE)
-    if(inherits(fit, "try-error")) fit <- suppressMessages(o2m(Xtrn,Ytrn,r,rx,ry,sparse=T,keepx=jj-1,groupx = CpG_groups))
-    err1 <- mse(Y,predict(fit, X))/sqrt(ssq(Y))
-    err2 <- mse(X,predict(fit, Y, "Y"))/sqrt(ssq(X))
-    fit_outc <- lda(x=fit$Tt,group[-iii])
-    err3 <- mse(as.numeric(group[iii])-1, 
-                as.numeric(predict(
-                  fit_outc,(Xtst-Xtst%*%fit$W_Y%*%t(fit$P_Y))%*%fit$W.)$class
-                )-1)/sqrt(ssq(as.numeric(group[iii])-1))
-    c(nr = jj, Yhat = err1, Xhat = err2, outc = err3)
-  })
-  outp
-})
-names(cvoutp) <- as.character(cv_grid)
-```
-
-An interactive plot is shown with three error types. The error when predicting $Y$ with $X$, $X$ with $Y$, and the outcome with $T$. 
-
-:::: {.bluebox .question data-latex=""}
-Based on this plot, how many groups should we keep? Based on which of the three error measures? 
-::::
-
-\ 
-
-:::: {.blueboxx data-latex=""}
-<a href="javascript:void()" onclick="toggle_visibility('foo3');">
-**_Answers (Click here)_** 
-</a>
-<div id="foo3" style="display:none">
-Based on the MSE of predicting the outcome, we keep around 100 groups. 
-</div>
-::::
-
-\ 
-
-
-
-```{.r .Routp}
-sapply(cvoutp, function(e) rowMeans(e)) %>% t %>% 
-  as.data.frame %>% mutate(across(-nr, scale)) %>% 
-  gather(key = "Type", value = "Error", -nr) %>% 
-  ggplot(aes(x=nr, y=Error, col=Type)) + geom_line() #-> p1
-#ggplotly(p1)
-```
-
-We redo the cross-validation for a finer grid around potential choices for the sparsity level. This should allow us to choose the definitive number of genes to retain. 
-
-
-```{.r .Routp}
-cv_gridbest <- round(c(25, 50, 75, 100, 150, 175, 200))
-cvoutp_best <- mclapply(mc.cores = cv_cores, cv_gridbest, 
-function(jj){
-  jj <- as.numeric(jj)
-  cat(jj,";  ")
-  outp <- sapply(1:cv_folds, function(ii){
-    iii <- which(ii == cv_set)
-    Xtst <- X[iii,]
-    Ytst <- Y[iii,]
-    Xtrn <- X[-iii,]
-    Ytrn <- Y[-iii,]
-    fit <- try(suppressMessages(o2m(Xtrn,Ytrn,r,rx,ry,sparse=T,keepx=jj,groupx = CpG_groups)), silent = TRUE)
-    if(inherits(fit, "try-error")) fit <- suppressMessages(o2m(Xtrn,Ytrn,r,rx,ry,sparse=T,keepx=jj-1,groupx = CpG_groups))
-    err1 <- mse(Y,predict(fit, X))/sqrt(ssq(Y))
-    err2 <- mse(X,predict(fit, Y, "Y"))/sqrt(ssq(X))
-    fit_outc <- lda(x=fit$Tt,group[-iii])
-    err3 <- mse(as.numeric(group[iii])-1, 
-                as.numeric(predict(
-                  fit_outc,(Xtst-Xtst%*%fit$W_Y%*%t(fit$P_Y))%*%fit$W.)$class
-                )-1)/sqrt(ssq(as.numeric(group[iii])-1))
-    c(nr = jj, Yhat = err1, Xhat = err2, outc = err3)
-  })
-  outp
-}); 
-names(cvoutp_best) <- as.character(cv_gridbest)
-```
-
-We plot the error for each choice, using boxplots. In this way, the variation across cross-validation runs is shown. 
-
-:::: {.bluebox .question data-latex=""}
-What would you choose as definitive number of groups to keep? Why?
-::::
-
-\ 
-
-:::: {.blueboxx data-latex=""}
-<a href="javascript:void()" onclick="toggle_visibility('foo4');">
-**_Answers (Click here)_** 
-</a>
-<div id="foo4" style="display:none">
-Somewhere between 100 and 200 is the optimal number. Taken into account that the other two error measures decrease, 175 probably the best. 
-</div>
-::::
-
-\ 
-
-
-
-```{.r .Routp}
-# sapply(cvoutp_best, function(e) rowMeans(e)) %>% t %>% 
-#   as.data.frame %>% mutate(across(-nr, scale)) %>% 
-#   gather(key = "Type", value = "Error", -nr) %>% 
-#   ggplot(aes(x=nr, y=Error, col=Type)) + geom_line() -> p1
-# ggplotly(p1)
-
-lapply(cvoutp_best, function(e) t(e) %>%
-         as.data.frame %>% gather(key = "Type", value = "Error",-nr)) %>%
-  Reduce(f=bind_rows) %>%
-  ggplot(aes(x=as.factor(nr), y=Error)) + geom_boxplot() +
-  facet_grid(Type~.,scales = "free")
-```
-
---->
 
 # Apply OmicsPLS to methylation and glycomics
 
@@ -422,15 +252,25 @@ There is no perfect separation, but in the second component there seems to be a 
 
 
 ```{.r .Routp}
-plot(data.frame(Tt=fit$Tt,U=fit$U), col = ClinicalVars$group, pch=20,
-     main="Joint X and Y components against each other")
 data.frame(Group = ClinicalVars$group, JPC = scores(fit, "Xjoint")) %>% 
   pivot_longer(-Group,
                names_to = "Comp", 
                values_to = "Scores") %>% 
   ggplot(aes(x=Comp, y=Scores, col=Group)) + 
-  geom_boxplot() + xlab("Component") + ylab("X scores") +
+  geom_boxplot() + xlab("Component") + ylab("Methylation scores") +
   theme_bw()
+data.frame(Group = ClinicalVars$group, JPC = scores(fit, "Yjoint")) %>% 
+  pivot_longer(-Group,
+               names_to = "Comp", 
+               values_to = "Scores") %>% 
+  ggplot(aes(x=Comp, y=Scores, col=Group)) + 
+  geom_boxplot() + xlab("Component") + ylab("Glycomics scores") +
+  theme_bw()
+
+## Another (fancy) approach is to run the following for multiple plots in one go
+GGally::ggpairs(data.frame(Tt=fit$Tt,U=fit$U), 
+                aes(col = ClinicalVars$group), progress = FALSE, 
+                title = "Joint X and Y components against each other") + theme_bw()
 ```
 
 We perform a logistic regression with the Down syndrome status as outcome, and the joint methylation scores as covariates. We exclude the mothers for now. 
