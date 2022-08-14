@@ -11,9 +11,6 @@ Please click on one of the links below. Download the files: **right click on the
 
 Alternatively, download the whole repo by clicking above on "code", and then "download ZIP".
 
-## Assignments
-
-The exercises are given inline. They typically refer to the next code block. The answers and code output are given in the file ending with ANSWERS.html. 
 
 ## Installing R packages
 
@@ -44,12 +41,26 @@ install.packages("remotes")   # install experimental packages
 remotes::install_bitbucket("ibi_group/disgenet2r") # experimental R package
 ```
 
+#### Installing disgenet2r
+
+To install disgenet2r, you need to be able to compile packages from source. Practically, this means that you need to install some additional tools. You will need [Rtools (Windows)](https://cran.r-project.org/bin/windows/Rtools/) or [Xcode (MacOS)](https://developer.apple.com/xcode/) which have separate installation instructions. Please first check whether they are already installed.
+
+Next, check whether you have the package `SPARQL` (e.g. by running `library(SPARQL)`). If not, you need to install this package from the CRAN archive: `install.packages("https://cran.r-project.org/src/contrib/Archive/SPARQL/SPARQL_1.16.tar.gz", repos=NULL, type="source")`. 
+
+Finally, install disgenet2r with `remotes::install_bitbucket("ibi_group/disgenet2r")`. 
+
+If the installation was not successful, it will not be a problem for the course. 
+
 #### Quick troubleshooting
 
-- _I get "These packages have more recent versions available" with a list of packages._ The best way is to enter 1 or 2 (All or CRAN only) and update old packages. In principle, you should be able to get away with selecting 3 (none), but it's recommended to regularly update R and the packages. 
+- _I get "These packages have more recent versions available" with a list of packages._ The best way is to enter 1 or 2 (All or CRAN only) and update old packages. In principle, you should be able to still install all packages while selecting 3 (none), but it's recommended to regularly update R and the packages. 
 - _I get "package 'xxx' is not available (for R version x.y.z)" when trying to install a package._ Most likely this is due to an outdated R version. Please update your R to at least version 4.0.5. Run `R.version` to see which version you have. It could also be that a dependent package is missing, check **all** error and warning messages to see which package is the culprit. Note that `disgenet2r` needs a special approach, see next point. 
-- _I get "dependency 'SPARQL' not available for package 'disgenet2r'"._ This is a more elaborate issue. You will need [Rtools (Windows)](https://cran.r-project.org/bin/windows/Rtools/) or [Xcode (MacOS)](https://developer.apple.com/xcode/) which have separate installation instructions. Please first check whether they are already installed. These tools allow you to install packages from source. Then run `install.packages("https://cran.r-project.org/src/contrib/Archive/SPARQL/SPARQL_1.16.tar.gz", repos=NULL, type="source")`. Then, retry installing `disgenet2r`. 
-- _I get another strange message._ Did you update to at least R 4.0.5? Did you install Rtools or Xcode when installing `disgenet2r`? If yes, please contact me (email: s.elbouhaddani at umcutrecht.nl) or open a new issue (see button Issues above). Please carefully describe what you did, and also copy-paste the output of `sessionInfo()` in your message. 
+- _I get another strange message._ Did you update to at least R 4.0.5? When trying to install `disgenet2r`, do you have Rtools or Xcode installed? If yes, please contact me (email: s.elbouhaddani at umcutrecht.nl) or open a new issue (see button Issues above). Please carefully describe what you did, and also copy-paste the output of `sessionInfo()` in your message. 
+
+
+## Assignments
+
+The exercises are given inline. They typically refer to the next code block. The answers and code output are given in the file ending with ANSWERS.html. 
 
 
 ## Evaluation form
