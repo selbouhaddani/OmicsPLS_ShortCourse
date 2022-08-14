@@ -75,8 +75,11 @@ We need several packages for data handling, fitting and visualizing the results.
 
 ```{.r .Routp}
 req_pack <- c("MASS", "parallel", "tidyverse", "magrittr", 
-              "plotly", "OmicsPLS", "httr", "disgenet2r")
+              "OmicsPLS", "httr", "disgenet2r", "GGally")
+if(sum(!(req_pack %in% installed.packages()[,1])) > 0){
+  cat("\nThe following packages are missing:\n")
 req_pack[which(!(req_pack %in% installed.packages()[,1]))]
+} else cat("\nNo packages missing.\n")
 ```
 
 
@@ -86,13 +89,13 @@ library(MASS)      # statistical tools, such as lda
 library(parallel)  # parallel computing
 library(tidyverse) # dataset & viz tools
 library(magrittr)  # pipe %>% operators
-library(plotly)    # interactive plots
 
 library(OmicsPLS)  # data integration toolkit
 
 ## Also needed but not loaded
 # install.packages("httr")
-# devtools::install_bitbucket("ibi_group/disgenet2r")
+# install.packages("GGally")
+# remotes::install_bitbucket("ibi_group/disgenet2r")
 ```
 
 The datasets are found in the `DownSyndrome.RData` file. We work with a subset of the methylation data measured only on chromosome 21.  A simple `load` statement should load them in your workspace. The `str` function can be used to get a first impression of the data objects. 
@@ -172,12 +175,16 @@ The optimal number of components changes a bit between runs, but 2, 4 and 6 (or 
 set.seed(83654)
 crossval_o2m_adjR2(X = methylation, Y = glycomics, 
                    a = 1:5, ax = 0:10, ay = 0:9, nr_folds = 10, nr_cores = 1)
-## -> 2 4 6
+## -> 4 2 6
 
+## Code to run a scree plot is 
 # par(mfrow=c(1,3))
-# plot(svd(crossprod(methylation,glycomics),0,0)$d^2 %>% (function(e) e/sum(e)), main='Joint Scree plot')
-# plot(svd(tcrossprod(methylation),0,0)$d %>% (function(e) e/sum(e)), main="Methylation Scree plot") 
-# plot(svd(crossprod(glycomics),0,0)$d %>% (function(e) e/sum(e)), main="Glycomics Scree plot")
+# plot(svd(crossprod(methylation,glycomics),0,0)$d^2 %>% 
+#   (function(e) e/sum(e)), main='Joint Scree plot')
+# plot(svd(tcrossprod(methylation),0,0)$d %>% (function(e) e/sum(e)), 
+#   main="Methylation Scree plot") 
+# plot(svd(crossprod(glycomics),0,0)$d %>% (function(e) e/sum(e)), 
+#   main="Glycomics Scree plot")
 # par(mfrow=c(1,1))
 # ## -> 3 5 1
 
@@ -243,7 +250,7 @@ Give an interpretation. Are the joint scores able to separate Down syndrome?
 **_Answers (Click here)_** 
 </a>
 <div id="foo6" style="display:none">
-There is no perfect separation, but in the second component there seems to be a difference in means between Down syndrome and the other two groups. 
+There is no perfect separation, but in the first component there seems to be a difference in means between Down syndrome and the siblings. The mothers have similar mean as DS, indicating that the first joint component may represent "biological age". 
 </div>
 ::::
 
@@ -297,15 +304,14 @@ DS is the reference (the first level when running `levels(glm_datmat$outc)`). Th
 ```{.r .Routp}
 glm_datmat <- data.frame(JPC=scores(fit, "Xjoint"), 
            outc = ClinicalVars$group) 
-glm(outc ~ ., data = glm_datmat%>% filter(outc != "MA"), family = "binomial") %>% summary()
-
-summary(lm(JPC.1 ~ outc, data = glm_datmat))
+glm(outc ~ ., data = glm_datmat%>% filter(outc != "MA"), family = "binomial") %>% 
+  summary()
 ```
 
 
 # Interpretation of the top genes
 
-We saw that joint methylation component one seemed to be significantly associated with Down syndrome: the mean scores differed significantly between DS and SB. Of interest is the genes corresponding with the top CpG sites, are their target genes representing some biological pathway? To this end, we use String-DB to cluster the selected genes. Although there is an R package for String-DB, we are going to use [the String-DB website](https://string-db.org/). On the website, click "multiple proteins". The input there is the list of selected genes. 
+We saw that joint methylation component one seemed to be significantly associated with Down syndrome: the mean scores differed significantly between DS and SB. Of interest is the genes corresponding with the top CpG sites, are their target genes representing some biological pathway? To this end, we use String-DB to cluster the top genes. Although there is an R package for String-DB, we are going to use [the String-DB website](https://string-db.org/). On the website, click "multiple proteins". The input there is the list of top genes. 
 
 Although determining a threshold to select the number of 'top' CpG sites is not straightforward, we are going to select 200 based on earlier analysis of these data. We also need to map from cg ID to gene ID. 
 
@@ -321,7 +327,7 @@ gene_list %<>% paste0(collapse = ";") %>%
 
 ## Using string-DB
 
-Copy-paste the selected genes in the String-DB website. 
+Copy-paste the top genes in the String-DB website. 
 
 :::: {.bluebox .question data-latex=""}
 Is there any remarkable clustering visible? Go to the analysis tab, is there any significant enrichment? 
@@ -405,4 +411,5 @@ DGN_DownS <- DGN_DE@qresult %>%
     pull(shared_symbol) %>% str_split(";") %>% unlist
 # cat(DGN_DownS, sep="\n")
 ```
+
 

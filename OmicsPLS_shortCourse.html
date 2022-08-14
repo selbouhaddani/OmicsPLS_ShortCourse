@@ -1190,19 +1190,22 @@ the results. Run this code to see which are not yet installed. All
 packages can be installed with <code>install.packages</code>, except
 disgenet2r, which has a separate install command shown below.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r Routp"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>req_pack <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;MASS&quot;</span>, <span class="st">&quot;parallel&quot;</span>, <span class="st">&quot;tidyverse&quot;</span>, <span class="st">&quot;magrittr&quot;</span>, </span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;plotly&quot;</span>, <span class="st">&quot;OmicsPLS&quot;</span>, <span class="st">&quot;httr&quot;</span>, <span class="st">&quot;disgenet2r&quot;</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>req_pack[<span class="fu">which</span>(<span class="sc">!</span>(req_pack <span class="sc">%in%</span> <span class="fu">installed.packages</span>()[,<span class="dv">1</span>]))]</span></code></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;OmicsPLS&quot;</span>, <span class="st">&quot;httr&quot;</span>, <span class="st">&quot;disgenet2r&quot;</span>, <span class="st">&quot;GGally&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="fu">sum</span>(<span class="sc">!</span>(req_pack <span class="sc">%in%</span> <span class="fu">installed.packages</span>()[,<span class="dv">1</span>])) <span class="sc">&gt;</span> <span class="dv">0</span>){</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">The following packages are missing:</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>req_pack[<span class="fu">which</span>(<span class="sc">!</span>(req_pack <span class="sc">%in%</span> <span class="fu">installed.packages</span>()[,<span class="dv">1</span>]))]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="fu">cat</span>(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">No packages missing.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r Routp"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)      <span class="co"># statistical tools, such as lda</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parallel)  <span class="co"># parallel computing</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co"># dataset &amp; viz tools</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr)  <span class="co"># pipe %&gt;% operators</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotly)    <span class="co"># interactive plots</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(OmicsPLS)  <span class="co"># data integration toolkit</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="do">## Also needed but not loaded</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(&quot;httr&quot;)</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># devtools::install_bitbucket(&quot;ibi_group/disgenet2r&quot;)</span></span></code></pre></div>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(OmicsPLS)  <span class="co"># data integration toolkit</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="do">## Also needed but not loaded</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(&quot;httr&quot;)</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(&quot;GGally&quot;)</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># remotes::install_bitbucket(&quot;ibi_group/disgenet2r&quot;)</span></span></code></pre></div>
 <p>The datasets are found in the <code>DownSyndrome.RData</code> file.
 We work with a subset of the methylation data measured only on
 chromosome 21. A simple <code>load</code> statement should load them in
@@ -1276,16 +1279,20 @@ make a scree plot, as mentioned above.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r Routp"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">83654</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">crossval_o2m_adjR2</span>(<span class="at">X =</span> methylation, <span class="at">Y =</span> glycomics, </span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">a =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">ax =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">10</span>, <span class="at">ay =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">9</span>, <span class="at">nr_folds =</span> <span class="dv">10</span>, <span class="at">nr_cores =</span> <span class="dv">1</span>)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="do">## -&gt; 2 4 6</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="do">## -&gt; 4 2 6</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># par(mfrow=c(1,3))</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># plot(svd(crossprod(methylation,glycomics),0,0)$d^2 %&gt;% (function(e) e/sum(e)), main=&#39;Joint Scree plot&#39;)</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># plot(svd(tcrossprod(methylation),0,0)$d %&gt;% (function(e) e/sum(e)), main=&quot;Methylation Scree plot&quot;) </span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># plot(svd(crossprod(glycomics),0,0)$d %&gt;% (function(e) e/sum(e)), main=&quot;Glycomics Scree plot&quot;)</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># par(mfrow=c(1,1))</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># ## -&gt; 3 5 1</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="dv">4</span>; rx <span class="ot">&lt;-</span> <span class="dv">2</span>; ry <span class="ot">&lt;-</span> <span class="dv">6</span></span></code></pre></div>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="do">## Code to run a scree plot is </span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># par(mfrow=c(1,3))</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># plot(svd(crossprod(methylation,glycomics),0,0)$d^2 %&gt;% </span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   (function(e) e/sum(e)), main=&#39;Joint Scree plot&#39;)</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># plot(svd(tcrossprod(methylation),0,0)$d %&gt;% (function(e) e/sum(e)), </span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co">#   main=&quot;Methylation Scree plot&quot;) </span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co"># plot(svd(crossprod(glycomics),0,0)$d %&gt;% (function(e) e/sum(e)), </span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">#   main=&quot;Glycomics Scree plot&quot;)</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co"># par(mfrow=c(1,1))</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co"># ## -&gt; 3 5 1</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="dv">4</span>; rx <span class="ot">&lt;-</span> <span class="dv">2</span>; ry <span class="ot">&lt;-</span> <span class="dv">6</span></span></code></pre></div>
 </div>
 </div>
 <div id="apply-omicspls-to-methylation-and-glycomics" class="section level1">
@@ -1338,9 +1345,10 @@ syndrome?</p>
 <a href="javascript:void()" onclick="toggle_visibility(&#39;foo6&#39;);">
 <strong><em>Answers (Click here)</em></strong> </a>
 <div id="foo6" style="display:none">
-<p>There is no perfect separation, but in the second component there
-seems to be a difference in means between Down syndrome and the other
-two groups.</p>
+<p>There is no perfect separation, but in the first component there
+seems to be a difference in means between Down syndrome and the
+siblings. The mothers have similar mean as DS, indicating that the first
+joint component may represent “biological age”.</p>
 </div>
 </div>
 <p> </p>
@@ -1385,9 +1393,8 @@ extra uncertainty is not incorporated in the p-value.</p>
 <p> </p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r Routp"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>glm_datmat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">JPC=</span><span class="fu">scores</span>(fit, <span class="st">&quot;Xjoint&quot;</span>), </span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">outc =</span> ClinicalVars<span class="sc">$</span>group) </span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">glm</span>(outc <span class="sc">~</span> ., <span class="at">data =</span> glm_datmat<span class="sc">%&gt;%</span> <span class="fu">filter</span>(outc <span class="sc">!=</span> <span class="st">&quot;MA&quot;</span>), <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(JPC<span class="fl">.1</span> <span class="sc">~</span> outc, <span class="at">data =</span> glm_datmat))</span></code></pre></div>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">glm</span>(outc <span class="sc">~</span> ., <span class="at">data =</span> glm_datmat<span class="sc">%&gt;%</span> <span class="fu">filter</span>(outc <span class="sc">!=</span> <span class="st">&quot;MA&quot;</span>), <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>()</span></code></pre></div>
 </div>
 </div>
 <div id="interpretation-of-the-top-genes" class="section level1">
@@ -1396,11 +1403,11 @@ extra uncertainty is not incorporated in the p-value.</p>
 significantly associated with Down syndrome: the mean scores differed
 significantly between DS and SB. Of interest is the genes corresponding
 with the top CpG sites, are their target genes representing some
-biological pathway? To this end, we use String-DB to cluster the
-selected genes. Although there is an R package for String-DB, we are
-going to use <a href="https://string-db.org/">the String-DB website</a>.
-On the website, click “multiple proteins”. The input there is the list
-of selected genes.</p>
+biological pathway? To this end, we use String-DB to cluster the top
+genes. Although there is an R package for String-DB, we are going to use
+<a href="https://string-db.org/">the String-DB website</a>. On the
+website, click “multiple proteins”. The input there is the list of top
+genes.</p>
 <p>Although determining a threshold to select the number of ‘top’ CpG
 sites is not straightforward, we are going to select 200 based on
 earlier analysis of these data. We also need to map from cg ID to gene
@@ -1411,7 +1418,7 @@ ID.</p>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_split</span>(<span class="st">&quot;;&quot;</span>) <span class="sc">%&gt;%</span> unlist <span class="sc">%&gt;%</span> unique </span></code></pre></div>
 <div id="using-string-db" class="section level2">
 <h2>Using string-DB</h2>
-<p>Copy-paste the selected genes in the String-DB website.</p>
+<p>Copy-paste the top genes in the String-DB website.</p>
 <div class="bluebox question">
 <p>Is there any remarkable clustering visible? Go to the analysis tab,
 is there any significant enrichment?</p>

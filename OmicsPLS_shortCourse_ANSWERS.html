@@ -1192,7 +1192,10 @@ packages can be installed with <code>install.packages</code>, except
 disgenet2r, which has a separate install command shown below.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r Routp"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>req_pack <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;MASS&quot;</span>, <span class="st">&quot;parallel&quot;</span>, <span class="st">&quot;tidyverse&quot;</span>, <span class="st">&quot;magrittr&quot;</span>, </span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;OmicsPLS&quot;</span>, <span class="st">&quot;httr&quot;</span>, <span class="st">&quot;disgenet2r&quot;</span>, <span class="st">&quot;GGally&quot;</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>req_pack[<span class="fu">which</span>(<span class="sc">!</span>(req_pack <span class="sc">%in%</span> <span class="fu">installed.packages</span>()[,<span class="dv">1</span>]))]</span></code></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="fu">sum</span>(<span class="sc">!</span>(req_pack <span class="sc">%in%</span> <span class="fu">installed.packages</span>()[,<span class="dv">1</span>])) <span class="sc">&gt;</span> <span class="dv">0</span>){</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">The following packages are missing:</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>req_pack[<span class="fu">which</span>(<span class="sc">!</span>(req_pack <span class="sc">%in%</span> <span class="fu">installed.packages</span>()[,<span class="dv">1</span>]))]</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="fu">cat</span>(<span class="st">&quot;</span><span class="sc">\n</span><span class="st">No packages missing.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r Routp"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MASS)      <span class="co"># statistical tools, such as lda</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(parallel)  <span class="co"># parallel computing</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse) <span class="co"># dataset &amp; viz tools</span></span>
@@ -1203,7 +1206,7 @@ disgenet2r, which has a separate install command shown below.</p>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="do">## Also needed but not loaded</span></span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(&quot;httr&quot;)</span></span>
 <span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(&quot;GGally&quot;)</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># devtools::install_bitbucket(&quot;ibi_group/disgenet2r&quot;)</span></span></code></pre></div>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># remotes::install_bitbucket(&quot;ibi_group/disgenet2r&quot;)</span></span></code></pre></div>
 <p>The datasets are found in the <code>DownSyndrome.RData</code> file.
 We work with a subset of the methylation data measured only on
 chromosome 21. A simple <code>load</code> statement should load them in
@@ -1316,24 +1319,27 @@ make a scree plot, as mentioned above.</p>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">a =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="at">ax =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">10</span>, <span class="at">ay =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">9</span>, <span class="at">nr_folds =</span> <span class="dv">10</span>, <span class="at">nr_cores =</span> <span class="dv">1</span>)</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Some combinations of # components exceed data dimensions, these combinations are not considered</span></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Minimum is at n = 1</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="do">## Elapsed time: 72.08 sec</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="do">## Elapsed time: 72.07 sec</span></span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="do">## -&gt; 4 2 6</span></span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="do">## Code to run a scree plot is </span></span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co"># par(mfrow=c(1,3))</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># plot(svd(crossprod(methylation,glycomics),0,0)$d^2 %&gt;% (function(e) e/sum(e)), main=&#39;Joint Scree plot&#39;)</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co"># plot(svd(tcrossprod(methylation),0,0)$d %&gt;% (function(e) e/sum(e)), main=&quot;Methylation Scree plot&quot;) </span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co"># plot(svd(crossprod(glycomics),0,0)$d %&gt;% (function(e) e/sum(e)), main=&quot;Glycomics Scree plot&quot;)</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co"># par(mfrow=c(1,1))</span></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co"># ## -&gt; 3 5 1</span></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="dv">4</span>; rx <span class="ot">&lt;-</span> <span class="dv">2</span>; ry <span class="ot">&lt;-</span> <span class="dv">6</span></span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="do">##         MSE n nx ny</span></span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 0.3298761 1  5  7</span></span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="do">## 2 0.3306665 2  4  6</span></span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="do">## 3 0.3382926 3  4  5</span></span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="do">## 4 0.3304293 4  2  6</span></span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="do">## 5 0.3328180 5  1  5</span></span></code></pre></div>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># plot(svd(crossprod(methylation,glycomics),0,0)$d^2 %&gt;% </span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">#   (function(e) e/sum(e)), main=&#39;Joint Scree plot&#39;)</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co"># plot(svd(tcrossprod(methylation),0,0)$d %&gt;% (function(e) e/sum(e)), </span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co">#   main=&quot;Methylation Scree plot&quot;) </span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co"># plot(svd(crossprod(glycomics),0,0)$d %&gt;% (function(e) e/sum(e)), </span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co">#   main=&quot;Glycomics Scree plot&quot;)</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co"># par(mfrow=c(1,1))</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="co"># ## -&gt; 3 5 1</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>r <span class="ot">&lt;-</span> <span class="dv">4</span>; rx <span class="ot">&lt;-</span> <span class="dv">2</span>; ry <span class="ot">&lt;-</span> <span class="dv">6</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="do">##         MSE n nx ny</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="do">## 1 0.3298761 1  5  7</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="do">## 2 0.3306665 2  4  6</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="do">## 3 0.3382926 3  4  5</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="do">## 4 0.3304293 4  2  6</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="do">## 5 0.3328180 5  1  5</span></span></code></pre></div>
 </div>
 </div>
 <div id="apply-omicspls-to-methylation-and-glycomics" class="section level1">
@@ -1426,9 +1432,10 @@ syndrome?</p>
 <a href="javascript:void()" onclick="toggle_visibility(&#39;foo6&#39;);">
 <strong><em>Answers (Click here)</em></strong> </a>
 <div id="foo6" style="display:none">
-<p>There is no perfect separation, but in the second component there
-seems to be a difference in means between Down syndrome and the other
-two groups.</p>
+<p>There is no perfect separation, but in the first component there
+seems to be a difference in means between Down syndrome and the
+siblings. The mothers have similar mean as DS, indicating that the first
+joint component may represent “biological age”.</p>
 </div>
 </div>
 <p> </p>
@@ -1479,55 +1486,34 @@ extra uncertainty is not incorporated in the p-value.</p>
 <p> </p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r Routp"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>glm_datmat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">JPC=</span><span class="fu">scores</span>(fit, <span class="st">&quot;Xjoint&quot;</span>), </span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">outc =</span> ClinicalVars<span class="sc">$</span>group) </span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">glm</span>(outc <span class="sc">~</span> ., <span class="at">data =</span> glm_datmat<span class="sc">%&gt;%</span> <span class="fu">filter</span>(outc <span class="sc">!=</span> <span class="st">&quot;MA&quot;</span>), <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">summary</span>()</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(JPC<span class="fl">.1</span> <span class="sc">~</span> outc, <span class="at">data =</span> glm_datmat))</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="do">## Call:</span></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="do">## glm(formula = outc ~ ., family = &quot;binomial&quot;, data = glm_datmat %&gt;% </span></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="do">##     filter(outc != &quot;MA&quot;))</span></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="do">## Deviance Residuals: </span></span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="do">##     Min       1Q   Median       3Q      Max  </span></span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="do">## -1.8549  -0.8082  -0.2482   0.8247   1.9569  </span></span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="do">## Coefficients:</span></span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="do">##             Estimate Std. Error z value Pr(&gt;|z|)   </span></span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="do">## (Intercept)  -0.2565     0.3406  -0.753  0.45130   </span></span>
-<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a><span class="do">## JPC.1         3.3245     1.1260   2.952  0.00315 **</span></span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="do">## JPC.2        -1.2129     1.1936  -1.016  0.30954   </span></span>
-<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="do">## JPC.3        -0.8280     1.1664  -0.710  0.47776   </span></span>
-<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="do">## JPC.4         1.6215     1.1565   1.402  0.16090   </span></span>
-<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a><span class="do">## ---</span></span>
-<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a><span class="do">## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
-<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a><span class="do">## (Dispersion parameter for binomial family taken to be 1)</span></span>
-<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a><span class="do">##     Null deviance: 77.561  on 55  degrees of freedom</span></span>
-<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a><span class="do">## Residual deviance: 54.914  on 51  degrees of freedom</span></span>
-<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a><span class="do">## AIC: 64.914</span></span>
-<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a><span class="do">## Number of Fisher Scoring iterations: 5</span></span>
-<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a><span class="do">## Call:</span></span>
-<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a><span class="do">## lm(formula = JPC.1 ~ outc, data = glm_datmat)</span></span>
-<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a><span class="do">## Residuals:</span></span>
-<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a><span class="do">##      Min       1Q   Median       3Q      Max </span></span>
-<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a><span class="do">## -0.79148 -0.26034 -0.03155  0.22301  1.11569 </span></span>
-<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a><span class="do">## Coefficients:</span></span>
-<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a><span class="do">##             Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
-<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a><span class="do">## (Intercept) -0.17510    0.07133  -2.455   0.0162 *  </span></span>
-<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a><span class="do">## outcSB       0.43569    0.10273   4.241 5.81e-05 ***</span></span>
-<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a><span class="do">## outcMA       0.10759    0.10088   1.067   0.2893    </span></span>
-<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a><span class="do">## ---</span></span>
-<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a><span class="do">## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
-<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
-<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a><span class="do">## Residual standard error: 0.3841 on 82 degrees of freedom</span></span>
-<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a><span class="do">## Multiple R-squared:  0.1909, Adjusted R-squared:  0.1712 </span></span>
-<span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a><span class="do">## F-statistic: 9.673 on 2 and 82 DF,  p-value: 0.0001691</span></span></code></pre></div>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">glm</span>(outc <span class="sc">~</span> ., <span class="at">data =</span> glm_datmat<span class="sc">%&gt;%</span> <span class="fu">filter</span>(outc <span class="sc">!=</span> <span class="st">&quot;MA&quot;</span>), <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>()</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="do">## Call:</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="do">## glm(formula = outc ~ ., family = &quot;binomial&quot;, data = glm_datmat %&gt;% </span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="do">##     filter(outc != &quot;MA&quot;))</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="do">## Deviance Residuals: </span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a><span class="do">##     Min       1Q   Median       3Q      Max  </span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a><span class="do">## -1.8549  -0.8082  -0.2482   0.8247   1.9569  </span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="do">## Coefficients:</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="do">##             Estimate Std. Error z value Pr(&gt;|z|)   </span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="do">## (Intercept)  -0.2565     0.3406  -0.753  0.45130   </span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a><span class="do">## JPC.1         3.3245     1.1260   2.952  0.00315 **</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a><span class="do">## JPC.2        -1.2129     1.1936  -1.016  0.30954   </span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a><span class="do">## JPC.3        -0.8280     1.1664  -0.710  0.47776   </span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="do">## JPC.4         1.6215     1.1565   1.402  0.16090   </span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a><span class="do">## ---</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a><span class="do">## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</span></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a><span class="do">## (Dispersion parameter for binomial family taken to be 1)</span></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a><span class="do">##     Null deviance: 77.561  on 55  degrees of freedom</span></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a><span class="do">## Residual deviance: 54.914  on 51  degrees of freedom</span></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a><span class="do">## AIC: 64.914</span></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a><span class="do">## Number of Fisher Scoring iterations: 5</span></span></code></pre></div>
 </div>
 </div>
 <div id="interpretation-of-the-top-genes" class="section level1">
@@ -1536,11 +1522,11 @@ extra uncertainty is not incorporated in the p-value.</p>
 significantly associated with Down syndrome: the mean scores differed
 significantly between DS and SB. Of interest is the genes corresponding
 with the top CpG sites, are their target genes representing some
-biological pathway? To this end, we use String-DB to cluster the
-selected genes. Although there is an R package for String-DB, we are
-going to use <a href="https://string-db.org/">the String-DB website</a>.
-On the website, click “multiple proteins”. The input there is the list
-of selected genes.</p>
+biological pathway? To this end, we use String-DB to cluster the top
+genes. Although there is an R package for String-DB, we are going to use
+<a href="https://string-db.org/">the String-DB website</a>. On the
+website, click “multiple proteins”. The input there is the list of top
+genes.</p>
 <p>Although determining a threshold to select the number of ‘top’ CpG
 sites is not straightforward, we are going to select 200 based on
 earlier analysis of these data. We also need to map from cg ID to gene
@@ -1551,7 +1537,7 @@ ID.</p>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_split</span>(<span class="st">&quot;;&quot;</span>) <span class="sc">%&gt;%</span> unlist <span class="sc">%&gt;%</span> unique </span></code></pre></div>
 <div id="using-string-db" class="section level2">
 <h2>Using string-DB</h2>
-<p>Copy-paste the selected genes in the String-DB website.</p>
+<p>Copy-paste the top genes in the String-DB website.</p>
 <div class="bluebox question">
 <p>Is there any remarkable clustering visible? Go to the analysis tab,
 is there any significant enrichment?</p>
