@@ -419,7 +419,7 @@ DS is the reference (the first level when running `levels(glm_datmat$outc)`). Th
 
 ```{.r .Routp}
 glm_datmat <- data.frame(JPC=scores(fit, "Xjoint"), 
-           outc = ClinicalVars$group) 
+           outc = ClinicalVars$group, age=ClinicalVars$age, sex=ClinicalVars$sex) 
 glm(outc ~ ., data = glm_datmat%>% filter(outc != "MA"), family = "binomial") %>% 
   summary()
 ## 
@@ -429,23 +429,25 @@ glm(outc ~ ., data = glm_datmat%>% filter(outc != "MA"), family = "binomial") %>
 ## 
 ## Deviance Residuals: 
 ##     Min       1Q   Median       3Q      Max  
-## -1.8549  -0.8082  -0.2482   0.8247   1.9569  
+## -2.1537  -0.6599  -0.1540   0.6807   2.3627  
 ## 
 ## Coefficients:
 ##             Estimate Std. Error z value Pr(>|z|)   
-## (Intercept)  -0.2565     0.3406  -0.753  0.45130   
-## JPC.1         3.3245     1.1260   2.952  0.00315 **
-## JPC.2        -1.2129     1.1936  -1.016  0.30954   
-## JPC.3        -0.8280     1.1664  -0.710  0.47776   
-## JPC.4         1.6215     1.1565   1.402  0.16090   
+## (Intercept) -2.47827    1.36984  -1.809   0.0704 . 
+## JPC.1        3.93715    1.44937   2.716   0.0066 **
+## JPC.2       -0.96927    1.41975  -0.683   0.4948   
+## JPC.3       -0.89815    1.30203  -0.690   0.4903   
+## JPC.4        1.33883    1.30891   1.023   0.3064   
+## age          0.09987    0.04659   2.144   0.0321 * 
+## sexM        -1.17358    0.81393  -1.442   0.1493   
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
 ##     Null deviance: 77.561  on 55  degrees of freedom
-## Residual deviance: 54.914  on 51  degrees of freedom
-## AIC: 64.914
+## Residual deviance: 46.418  on 49  degrees of freedom
+## AIC: 60.418
 ## 
 ## Number of Fisher Scoring iterations: 5
 ```

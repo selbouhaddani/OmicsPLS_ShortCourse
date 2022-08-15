@@ -303,7 +303,7 @@ DS is the reference (the first level when running `levels(glm_datmat$outc)`). Th
 
 ```{.r .Routp}
 glm_datmat <- data.frame(JPC=scores(fit, "Xjoint"), 
-           outc = ClinicalVars$group) 
+           outc = ClinicalVars$group, age=ClinicalVars$age, sex=ClinicalVars$sex) 
 glm(outc ~ ., data = glm_datmat%>% filter(outc != "MA"), family = "binomial") %>% 
   summary()
 ```

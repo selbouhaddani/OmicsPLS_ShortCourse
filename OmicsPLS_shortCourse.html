@@ -1392,7 +1392,7 @@ extra uncertainty is not incorporated in the p-value.</p>
 </div>
 <p> </p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r Routp"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>glm_datmat <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">JPC=</span><span class="fu">scores</span>(fit, <span class="st">&quot;Xjoint&quot;</span>), </span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">outc =</span> ClinicalVars<span class="sc">$</span>group) </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">outc =</span> ClinicalVars<span class="sc">$</span>group, <span class="at">age=</span>ClinicalVars<span class="sc">$</span>age, <span class="at">sex=</span>ClinicalVars<span class="sc">$</span>sex) </span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">glm</span>(outc <span class="sc">~</span> ., <span class="at">data =</span> glm_datmat<span class="sc">%&gt;%</span> <span class="fu">filter</span>(outc <span class="sc">!=</span> <span class="st">&quot;MA&quot;</span>), <span class="at">family =</span> <span class="st">&quot;binomial&quot;</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>()</span></code></pre></div>
 </div>
