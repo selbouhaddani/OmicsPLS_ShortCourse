@@ -80,9 +80,13 @@ Please fill in the short evaluation form. Your feedback is much appreciated.
 
 > Vincenzo Borelli, Valerie Vanhooren, Emanuela Lonardi, Karli R. Reiding, Miriam Capri, Claude Libert, Paolo Garagnani, Stefano Salvioli, Claudio Franceschi, and Manfred Wuhrer. Journal of Proteome Research 2015 14 (10), 4232-4245. https://doi.org/10.1021/acs.jproteome.5b00356
 
+> Bacalini, M. G., Gentilini, D., Boattini, A., Giampieri, E., Pirazzini, C., Giuliani, C., Fontanesi, E., Scurti, M., Remondini, D., Capri, M., Cocchi, G., Ghezzo, A., Del Rio, A., Luiselli, D., Vitale, G., Mari, D., Castellani, G., Fraga, M., Di Blasio, A. M., … Garagnani, P. (2015). Identification of a DNA methylation signature in blood cells from persons with Down Syndrome. Aging, 7(2), 82–96. https://doi.org/10.18632/aging.100715
+
 > Cook, R. D. (2022). A slice of multivariate dimension reduction. Journal of Multivariate Analysis, 188, 104812. https://doi.org/10.1016/j.jmva.2021.104812
 
 > Gu, Z., el Bouhaddani, S., Pei, J. et al. Statistical integration of two omics datasets using GO2PLS. BMC Bioinformatics 22, 131 (2021). https://doi.org/10.1186/s12859-021-03958-3
+
+> el Bouhaddani, S., Uh, H.-W., Jongbloed, G., & Houwing‐Duistermaat, J. (2022). Statistical integration of heterogeneous omics data: Probabilistic two‐way partial least squares (PO2PLS). Journal of the Royal Statistical Society: Series C (Applied Statistics). https://doi.org/10.1111/rssc.12583
 
 
 
