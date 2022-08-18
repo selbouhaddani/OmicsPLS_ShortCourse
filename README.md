@@ -9,11 +9,11 @@ Please click on one of the links below. Download the files: **right click on the
 - https://github.com/selbouhaddani/OmicsPLS_ShortCourse/blob/main/OmicsPLS_shortCourse_ANSWERS.html
 - https://github.com/selbouhaddani/OmicsPLS_ShortCourse/blob/main/DownSyndrome.RData
 
-Alternatively, download the whole repo by clicking above on "code", and then "download ZIP".
-
 The course slides are in this folder. Click on one of the slides and right click on the download button + "save link as" as described above. 
 
 - https://github.com/selbouhaddani/OmicsPLS_ShortCourse/tree/main/Slides
+
+Alternatively, download the whole repo by clicking above on "code", and then "download ZIP".
 
 
 ## Installing R packages
@@ -57,6 +57,7 @@ If the installation was not successful, it will not be a problem for the course.
 
 #### Quick troubleshooting
 
+- _There is a problem with the html or other files._ If the one-by-one download didn't work, try downloading the whole repository as a zip file. Extract the zip to a folder and try again. If the issue remains, please contact me (email: s.elbouhaddani at umcutrecht.nl). 
 - _I get "These packages have more recent versions available" with a list of packages._ The best way is to enter 1 or 2 (All or CRAN only) and update old packages. In principle, you should be able to still install all packages while selecting 3 (none), but it's recommended to regularly update R and the packages. 
 - _I get "package 'xxx' is not available (for R version x.y.z)" when trying to install a package._ Most likely this is due to an outdated R version. Please update your R to at least version 4.0.5. Run `R.version` to see which version you have. It could also be that a dependent package is missing, check **all** errors, warnings and messages to see which package is the culprit. Note that `disgenet2r` needs a special approach, described above. 
 - _I get another strange message._ Did you update to at least R 4.0.5? When trying to install `disgenet2r`, do you have Rtools or Xcode installed? If yes, please contact me (email: s.elbouhaddani at umcutrecht.nl) or open a new issue (see button Issues above). Please carefully describe what you did, and also copy-paste the output of `sessionInfo()` in your message. 
