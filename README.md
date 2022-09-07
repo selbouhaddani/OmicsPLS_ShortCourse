@@ -5,25 +5,29 @@
 
 The course is organized in two main parts, consisting of theory and exercises. Part one is about principal component analysis, part two is about partial least squares and O2PLS.
 
+### Introduction slides 
+
+- View the [introduction for this course](https://github.com/selbouhaddani/OmicsPLS_ShortCourse/blob/MOOC/Slides/OmicsPLS%200%20intro.pdf) 
+
 ### Part one: Principal component analysis
 
 Please download/view the following materials.
 
-- Theory: Slides in [Powerpoint format](link) or in [Adobe pdf format](link).
-- Theory: [video lecture on Youtube](link)
-- Exercises: [for part one](link)
-- Solutions: [for part one](link)
+- Theory: Slides in [Powerpoint format](https://github.com/selbouhaddani/OmicsPLS_ShortCourse/blob/MOOC/Slides/OmicsPLS%201%20PCA.pptx) or in [Adobe pdf format](https://github.com/selbouhaddani/OmicsPLS_ShortCourse/blob/MOOC/Slides/OmicsPLS%201%20PCA.pdf)
+- Theory: [video lecture of part one (PCA)](https://youtu.be/pUNrqiaKPJ4) on Youtube (or the [complete playlist](https://youtube.com/playlist?list=PLugT-JXuXzBZUXkxOmCHFECJSrTYwtfPF))
+- Exercises [for part one](https://github.com/selbouhaddani/OmicsPLS_ShortCourse/blob/MOOC/OmicsPLS_Exercises_1_PCA.html)
+- Solutions [for part one](https://github.com/selbouhaddani/OmicsPLS_ShortCourse/blob/MOOC/OmicsPLS_Solutions_1_PCA.html)
 
 ### Part two: Partial least squares and O2PLS
 
 Please download/view the following materials.
 
-- Theory: Slides for PLS in [Powerpoint format](link) or in [Adobe pdf format](link).
-- Theory: Slides for O2PLS in [Powerpoint format](link) or in [Adobe pdf format](link).
-- Theory: For PLS a [video lecture on Youtube](link)
-- Theory: For O2PLS a [video lecture on Youtube](link)
-- Exercises: [for part two (PLS and O2PLS)](link)
-- Solutions: [for part two (PLS and O2PLS)](link)
+- Theory: Slides for PLS in [Powerpoint format](https://github.com/selbouhaddani/OmicsPLS_ShortCourse/blob/MOOC/Slides/OmicsPLS%202%20PLS.pptx) or in [Adobe pdf format](https://github.com/selbouhaddani/OmicsPLS_ShortCourse/blob/MOOC/Slides/OmicsPLS%202%20PLS.pdf)
+- Theory: Slides for O2PLS in [Powerpoint format](https://github.com/selbouhaddani/OmicsPLS_ShortCourse/blob/MOOC/Slides/OmicsPLS%203%20O2PLS.pptx) or in [Adobe pdf format](https://github.com/selbouhaddani/OmicsPLS_ShortCourse/blob/MOOC/Slides/OmicsPLS%203%20O2PLS.pdf)
+- Theory: [video lecture of part two (PLS)](https://youtu.be/wb2kazXvhow) on Youtube (or the [complete playlist](https://youtube.com/playlist?list=PLugT-JXuXzBZUXkxOmCHFECJSrTYwtfPF))
+- Theory: [video lecture of part two (O2PLS)](https://youtu.be/U2dH6X87E6w) on Youtube (or the [complete playlist](https://youtube.com/playlist?list=PLugT-JXuXzBZUXkxOmCHFECJSrTYwtfPF))
+- Exercises [for part two](https://github.com/selbouhaddani/OmicsPLS_ShortCourse/blob/MOOC/OmicsPLS_Exercises_2_O2PLS.html)
+- Solutions [for part two](https://github.com/selbouhaddani/OmicsPLS_ShortCourse/blob/MOOC/OmicsPLS_Solutions_2_O2PLS.html)
 
 ## Download instructions
 
