@@ -3,17 +3,17 @@
 
 ## Instructions to download material
 
-Please click on one of the links below. Download the files: **right click on the 'download' button** and click "save link as". Check that the extension is '.html' or '.RData'. 
+Please click on one of the links below. Download the files: **right click on the 'download' button** and click "save link as". Check that the extension is '.html' resp. '.RData'. 
 
 - https://github.com/selbouhaddani/OmicsPLS_ShortCourse/blob/main/OmicsPLS_shortCourse.html
 - https://github.com/selbouhaddani/OmicsPLS_ShortCourse/blob/main/OmicsPLS_shortCourse_ANSWERS.html
 - https://github.com/selbouhaddani/OmicsPLS_ShortCourse/blob/main/DownSyndrome.RData
 
-The course slides are in this folder. Click on one of the slides and right click on the download button + "save link as" as described above. 
+The course slides are in this folder. Click on one of the slides and right click on the download button + "save link as". 
 
 - https://github.com/selbouhaddani/OmicsPLS_ShortCourse/tree/main/Slides
 
-Alternatively, download the whole repo by clicking above on "code", and then "download ZIP".
+Alternatively, download the whole repo by clicking above on "code" and then "download ZIP".
 
 
 ## Installing R packages
@@ -47,13 +47,13 @@ remotes::install_bitbucket("ibi_group/disgenet2r") # experimental R package
 
 #### Installing disgenet2r
 
+NOTE If the installation described below was not successful, it will not be a problem for the course.
+
 To install disgenet2r, you need to be able to compile packages from source. Practically, this means that you need to install some additional tools. You will need [Rtools (Windows)](https://cran.r-project.org/bin/windows/Rtools/) or [Xcode (MacOS)](https://developer.apple.com/xcode/) which have separate installation instructions. Please first check whether they are already installed, e.g. by looking at the list of installed programs.
 
 Next, check whether you have the package `SPARQL` (e.g. by running `library(SPARQL)`). If not, you need to install this package from the CRAN archive: `install.packages("https://cran.r-project.org/src/contrib/Archive/SPARQL/SPARQL_1.16.tar.gz", repos=NULL, type="source")`. 
 
-Finally, install disgenet2r with `remotes::install_bitbucket("ibi_group/disgenet2r")`. 
-
-If the installation was not successful, it will not be a problem for the course. 
+Finally, install disgenet2r with `remotes::install_bitbucket("ibi_group/disgenet2r")`.  
 
 #### Quick troubleshooting
 
@@ -65,7 +65,7 @@ If the installation was not successful, it will not be a problem for the course.
 
 ## Assignments
 
-The exercises are given inline. They typically refer to the next code block. The answers and code output are given in the file ending with ANSWERS.html. 
+The exercises are given inline. They typically refer to the next code block. The answers and code output are given in the file ending with "ANSWERS.html". 
 
 
 ## Evaluation form
