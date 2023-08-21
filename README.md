@@ -1,5 +1,5 @@
 # OmicsPLS Short Course
-*2022 Edition* | [Said el Bouhaddani](https://www.linkedin.com/in/selbouhaddani/) and [Jeanine Houwing-Duistermaat](https://www.linkedin.com/in/jeanine-houwing-duistermaat/)
+*2023 Edition* | [Said el Bouhaddani](https://www.linkedin.com/in/selbouhaddani/) and [Jeanine Houwing-Duistermaat](https://www.linkedin.com/in/jeanine-houwing-duistermaat/)
 
 ## Instructions to download material
 
