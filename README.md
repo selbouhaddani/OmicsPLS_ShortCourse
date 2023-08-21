@@ -72,7 +72,7 @@ The exercises are given inline. They typically refer to the next code block. The
 
 Please fill in the short evaluation form. Your feedback is much appreciated. 
 
-[Click here for the form](https://forms.gle/w6Tj3MSeRYZ7HaaW6) (the form will be activated at the end of the course). 
+[Click here for the form](https://forms.gle/pNdRfr9PXkFxHQib7) (the form will be activated at the end of the course). 
 
 
 ## Reading material
