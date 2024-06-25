@@ -2,7 +2,6 @@
 title: "Integrating multi-omics underlying Down syndrome with OmicsPLS"
 subtitle: "Exercises"
 author: "Said el Bouhaddani and Jeanine Houwing-Duistermaat"
-date: '2022-08-21'
 output:
   rmdformats::material:
     highlight: tango

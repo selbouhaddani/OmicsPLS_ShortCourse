@@ -2,7 +2,6 @@
 title: "Integrating multi-omics underlying Down syndrome with OmicsPLS"
 subtitle: "Answer key"
 author: "Said el Bouhaddani and Jeanine Houwing-Duistermaat"
-date: '2022-08-21'
 output:
   rmdformats::material:
     highlight: tango
@@ -184,7 +183,7 @@ table(ClinicalVars$group)
 ##  8 GSM1272129 DS    yes         29 M         20
 ##  9 GSM1272130 DS    yes         22 F         23
 ## 10 GSM1272131 DS    yes         36 M         28
-## # … with 75 more rows
+## # ℹ 75 more rows
 ## 
 ## DS SB MA 
 ## 29 27 29
@@ -223,8 +222,8 @@ set.seed(83654)
 crossval_o2m_adjR2(X = methylation, Y = glycomics, 
                    a = 1:5, ax = 0:10, ay = 0:9, nr_folds = 10, nr_cores = 1)
 ## Some combinations of # components exceed data dimensions, these combinations are not considered
-## Minimum is at n = 1
-## Elapsed time: 72.07 sec
+## Minimum is at n = 5
+## Elapsed time: 9.09 sec
 ## -> 4 2 6
 
 ## Code to run a scree plot is 
@@ -240,11 +239,11 @@ crossval_o2m_adjR2(X = methylation, Y = glycomics,
 
 r <- 4; rx <- 2; ry <- 6
 ##         MSE n nx ny
-## 1 0.3298761 1  5  7
-## 2 0.3306665 2  4  6
-## 3 0.3382926 3  4  5
-## 4 0.3304293 4  2  6
-## 5 0.3328180 5  1  5
+## 1 0.3324882 1  6  5
+## 2 0.3355846 2  5  5
+## 3 0.3358830 3  4  5
+## 4 0.3343428 4  2  5
+## 5 0.3318578 5  1  5
 ```
 
 
@@ -271,31 +270,31 @@ summary(fit)
 ## -- Joint, Orthogonal and Noise as proportions:
 ## 
 ##            data X data Y
-## Joint       0.108  0.084
-## Orthogonal  0.135  0.916
-## Noise       0.757  0.000
+## Joint       0.100  0.097
+## Orthogonal  0.135  0.903
+## Noise       0.766  0.000
 ## 
 ## -- Predictable variation in Y-joint part by X-joint part:
-## Variation in T*B_T relative to U: 0.514 
+## Variation in T*B_T relative to U: 0.47 
 ## -- Predictable variation in X-joint part by Y-joint part:
-## Variation in U*B_U relative to T: 0.5 
+## Variation in U*B_U relative to T: 0.461 
 ## 
 ## -- Variances per component:
 ## 
 ##         Comp 1 Comp 2 Comp 3 Comp 4
-## X joint 14.955  7.679 10.218  7.890
-## Y joint  3.983  1.286  0.761  0.117
+## X joint  9.298 11.867  8.038  8.409
+## Y joint  4.678  1.132  1.156  0.117
 ## 
 ##        Comp 1 Comp 2
 ## X Orth 30.302 20.611
 ## 
 ##        Comp 1 Comp 2 Comp 3 Comp 4 Comp 5 Comp 6
-## Y Orth 18.318 13.758 19.502  5.324  2.926  5.448
+## Y Orth 17.435 12.994  11.12  4.812 10.109 10.584
 ## 
 ## 
 ## -  Coefficient in 'U = T B_T + H_U' model:
 ## -- Diagonal elements of B_T =
-##  0.38 0.302 0.209 0.078
+##  0.488 0.219 0.28 0.076
 ```
 
 ## Visualize the results: loadings
@@ -427,27 +426,23 @@ glm(outc ~ ., data = glm_datmat%>% filter(outc != "MA"), family = "binomial") %>
 ## glm(formula = outc ~ ., family = "binomial", data = glm_datmat %>% 
 ##     filter(outc != "MA"))
 ## 
-## Deviance Residuals: 
-##     Min       1Q   Median       3Q      Max  
-## -2.1537  -0.6599  -0.1540   0.6807   2.3627  
-## 
 ## Coefficients:
-##             Estimate Std. Error z value Pr(>|z|)   
-## (Intercept) -2.47827    1.36984  -1.809   0.0704 . 
-## JPC.1        3.93715    1.44937   2.716   0.0066 **
-## JPC.2       -0.96927    1.41975  -0.683   0.4948   
-## JPC.3       -0.89815    1.30203  -0.690   0.4903   
-## JPC.4        1.33883    1.30891   1.023   0.3064   
-## age          0.09987    0.04659   2.144   0.0321 * 
-## sexM        -1.17358    0.81393  -1.442   0.1493   
+##             Estimate Std. Error z value Pr(>|z|)  
+## (Intercept) -1.33586    1.28203  -1.042   0.2974  
+## JPC.1       -1.00705    1.24328  -0.810   0.4179  
+## JPC.2        0.78268    1.04571   0.748   0.4542  
+## JPC.3       -2.20276    1.28321  -1.717   0.0861 .
+## JPC.4       -2.30158    1.29227  -1.781   0.0749 .
+## age          0.06824    0.04661   1.464   0.1431  
+## sexM        -1.78908    0.74301  -2.408   0.0160 *
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## (Dispersion parameter for binomial family taken to be 1)
 ## 
 ##     Null deviance: 77.561  on 55  degrees of freedom
-## Residual deviance: 46.418  on 49  degrees of freedom
-## AIC: 60.418
+## Residual deviance: 53.311  on 49  degrees of freedom
+## AIC: 67.311
 ## 
 ## Number of Fisher Scoring iterations: 5
 ```
@@ -531,17 +526,17 @@ DGN_DE@qresult[1:10,
 ## <request>
 ## Options:
 ## * timeout_ms: 4e+12
-##                        Description          FDR Ratio   BgRatio
-## 236                  Down Syndrome 4.983930e-35 38/65 766/21666
-## 2736  Complete Trisomy 21 Syndrome 2.709284e-34 36/65 669/21666
-## 2320 DOWN SYNDROME CRITICAL REGION 9.293346e-19 13/65  57/21666
-## 1853        Chromosome 21 monosomy 1.849628e-07  5/65  13/21666
-## 2468      Alzheimer disease type 1 1.452115e-05  3/65   3/21666
-## 169            Cognition Disorders 8.819130e-05 12/65 607/21666
-## 375           Hirschsprung Disease 8.819130e-05 10/65 384/21666
-## 548             Mental Retardation 1.006005e-04 11/65 505/21666
-## 207             Presenile dementia 2.703029e-03 11/65 718/21666
-## 303             Fragile X Syndrome 4.152165e-03  6/65 194/21666
+##                             Description          FDR Ratio   BgRatio
+## 246                       Down Syndrome 2.853062e-42 45/76 766/21666
+## 2750       Complete Trisomy 21 Syndrome 6.387882e-42 43/76 669/21666
+## 2335      DOWN SYNDROME CRITICAL REGION 7.825305e-20 14/76  57/21666
+## 1831             Chromosome 21 monosomy 6.913355e-05  4/76  13/21666
+## 1591  Down Syndrome, Partial Trisomy 21 2.107633e-04  4/76  19/21666
+## 1592 Trisomy 21, Meiotic Nondisjunction 2.107633e-04  4/76  19/21666
+## 1782 Trisomy 21, Mitotic Nondisjunction 2.107633e-04  4/76  19/21666
+## 394                Hirschsprung Disease 3.262582e-04 10/76 384/21666
+## 1812       Unverricht-Lundborg Syndrome 4.863252e-04  5/76  56/21666
+## 181                 Cognition Disorders 2.384353e-03 11/76 607/21666
 ```
 
 ```
